@@ -1,0 +1,103 @@
+﻿@model ReflectionIT.Mvc.Paging.PagingList<Produtos>
+
+@{
+    var profile = UserManager.Users.ToList();
+}
+
+<section>
+    <div class="card" style="margin-top:50px;">
+        <div class="card-header">
+            <p>
+                <a class="btn btn-success" asp-area="Admin" asp-controller="Produtos" asp-action="Create">Criar</a>
+            </p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <form method="get" class="form-inline">
+                    <div class="input-group mb-3">
+                        <input name="filter" type="text" class="form-control" placeholder="Pesquise o titulo da produtos" value="@Model.RouteValue["Filter"]">
+                        <button class="btn btn-primary" type="submit">Procurar</button>
+                    </div>
+                </form>
+                Valor Total de Produtos : @Model.TotalRecordCount
+            </li>
+            <li class="list-group-item">
+                <div class="table-responsive">
+                    <table class="table table-bordered table table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <strong>Imagem</strong>
+                                </th>
+                                <th>
+                                    <strong>Titulo</strong>
+                                </th>
+                                <th>
+                                    <strong>Descricao</strong>
+                                </th>
+                                <th>
+                                    <strong>Categoria</strong>
+                                </th>
+                                <th>
+                                    <strong>Preço</strong>
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                string BaseId = Convert.ToBase64String(BitConverter.GetBytes(item.IdProdutos));
+                                <tr>
+                                    <td>
+                                        <img src="~/imagem/@item.URLImagem" alt="..." width="80" height="80">
+                                    </td>
+                                    <td>
+                                        <p>@Html.DisplayFor(modelItem => item.Nome)</p>
+                                    </td>
+                                    <td>
+                                        <p>@item.Descricao.Substring(0, 10)...</p>
+                                    </td>
+                                    <td>
+                                        <p>@item.Categoria</p>
+                                    </td>
+                                    <td>
+                                        <p>@Html.DisplayFor(modelItem => item.Preco)</p>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-secondary" asp-area="Admin" asp-controller="Produtos" asp-action="Edit" asp-route-IdResult="@BaseId">Editar</a>
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#produto-@item.IdProdutos">
+                                            Deletar
+                                        </button>
+                                        <div class="modal fade" id="produto-@item.IdProdutos" tabindex="-1" aria-labelledby="produtolLabel" aria-hidden="true">
+                                            <div class="modal-dialog text-muted">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="produtoLabel">Apagar Conteudo</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Deseja realmente apagar esse conteudo?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                                                        <form asp-area="Admin" asp-controller="Produtos" asp-action="Delete" asp-route-IdResult="@BaseId">
+                                                            <input type="submit" value="Deletar" class="btn btn-danger" />
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div>
+                        <vc:pager paging-list="@Model"></vc:pager>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</section>
