@@ -87,6 +87,19 @@ namespace LojaVirtual.Controllers
 
                 await _checkout.CreateCarrinho(Checkout);
             }
+            else if (ProductCheck.Comprado)
+            {
+                var Checkout = new Carrinho
+                {
+                    Comprado = false,
+                    Quantidade = Quantidade,
+                    DataCompra = DateTime.Now.AddDays(3),
+                    IdProdutos = id.Value,
+                    Id = profile.Id
+                };
+
+                await _checkout.CreateCarrinho(Checkout);
+            }
             else
             {
                 if (!ProductCheck.Comprado)
