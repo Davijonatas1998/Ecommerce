@@ -45,7 +45,6 @@ namespace LojaVirtual.Areas.Admin.Controllers
             return View();
         }
 
-        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdProdutos, URLImagem, Nome, Descricao, Categoria, Preco")] Produtos produtos, List<IFormFile> Imagem)
@@ -122,7 +121,7 @@ namespace LojaVirtual.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteDeleteAsync(string IdResult)
+        public async Task<IActionResult> Delete(string IdResult)
         {
             int? id = ServicesManager.IdAction(IdResult);
             var produto = await _produto.GetProdutos(id);
